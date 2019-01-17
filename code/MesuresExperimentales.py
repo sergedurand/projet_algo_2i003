@@ -40,16 +40,13 @@ def InstanciationComplet(h):
     (tA,tB,cAB,cBA)=InstanceAleatoire(n,50)
     return (Arbre,tA,tB,cAB,cBA)
 
- 
+#pour affiner test de performances
 def CalculArbreDroit(n):
-    res = [0]
-    for i in range(n-1):
-        res.append(i)
-    return res
+    """créé un arbre "droit" (1 fils par noeud sauf la feuille)
+    """
+    res = [i for i in range (n-1)]
+    return [0] + res
 
-def CalculArbreh2(n):
-    res = [0]*n
-    return res
 
 #fonction de test sur algo 1:
 def testCalculSigma1(t,n):
