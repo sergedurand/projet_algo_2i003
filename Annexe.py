@@ -6,7 +6,7 @@ Created on Sun Dec  9 14:41:55 2018
 ce fichier contient des fonctions de tests divers, de première ébauches etc.
 """
 
-#Algo 2 version récursion croisée. Exponentiel
+#Algo 2 version récursion croisée. Des premiers tests indiquent qu'il est plus lent que l'algo finalement retenu.
 def CalculdA(Arbre,tA,tB,cAB,cBA,dA,dB,u):
     Succ = succ(u,Arbre)
     if(len(Succ)==0):
