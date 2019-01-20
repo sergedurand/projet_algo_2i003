@@ -81,7 +81,7 @@
 %remplacer pdflatex -synctex=1 -interaction=nonstopmode %.tex
 %par pdflatex -synctex=1 -interaction=nonstopmode --shell-escape %.tex
 \title{2I003 : Ordonnancement d'une application sur une machine hétérogène}
-\author{Arthur LIMBOUR et Serge DURAND}
+\author{Serge DURAND et Arthur LIMBOUR}
 \begin{document}
 \maketitle
 Toutes les fonctions décrites dans ce rapport sont fournis dans un fichier zip en annexe, contenant les codes sources en python.
@@ -215,7 +215,7 @@ def CalculSigmaOptimum(Arbre,tA,tB,cAB,cBA):
     Allocs = CalculListeAllocs(Arbre)
     #Allocs = [list(tup) for tup in list(itertools.product(range(2), repeat=n))]
     Lbest = Allocs[0]
-    Deltabest = CalculDelta(Arbre,tA,tB,cAB,cBA,Allocs[0],0) #vu qu'on recherche un min on peut pas initialisé à 0
+    Deltabest = CalculDelta(Arbre,tA,tB,cAB,cBA,Allocs[0],0) #vu qu'on recherche un min on ne peut pas initialiser à 0
     for sigma in Allocs[1:]: #pas besoin de recalculer pour la première allocation possible
         Deltatemp = CalculDelta(Arbre,tA,tB,cAB,cBA,sigma,0)
         if Deltatemp < Deltabest: #on a trouvé une meilleure allocation
@@ -226,7 +226,7 @@ def CalculSigmaOptimum(Arbre,tA,tB,cAB,cBA):
 
 Complexité : 
 
-Il y a $2^n$ allocations possibles. On peut le voir en remarquant que l'ensemble des allocations est en bijection avec l'ensemble des fonctions de $\{1,...,n\}$ dans $\{0,1\}$, et ce dernier ensemble à pour cardinal : $Card(\{0,1\})^{Card(\{1,...,n\})}=2^n$.
+Il y a $2^n$ allocations possibles. On peut le voir en remarquant que l'ensemble des allocations est en bijection avec l'ensemble des fonctions de $\{1,...,n\}$ dans $\{0,1\}$, et ce dernier ensemble a pour cardinal : $Card(\{0,1\})^{Card(\{1,...,n\})}=2^n$.
 Il y a alors $2^n$ appels à CalculDelta, la complexité est donc $\Theta(n^2*2^n)$. Ici on est bien en $\Theta$ car on sait que la fonction CalculDelta est appelée d'abord sur la racine à chaque allocation. 
 Note sur la constitution des allocations : nous avons testé la bibliothèque itertools pour alléger le code, mais le problème de mémoire est alors rencontré pour la même valeur de h, il n'y a pas d'améliorations notables de performance.
 
@@ -298,7 +298,7 @@ def CalculBorneinf(Arbre,Candidats,Marques,tA,tB,cAB,cBA,dA,dB,cpt):
     dA = dB = [0]*len(Arbre)
     cpt n'est là que pour compter les appels récursifs, on le met à 0...
     """
-    if(Candidats=={0}): 
+    if(Candidats=={0} or Candidats==[0]): 
         dA[0]=max([min([dA[v],dB[v]+cAB[v]]) for v in succ(0,Arbre)]) + tA[0]
         dB[0] = max([min([dB[v],dA[v]+cBA[v]]) for v in succ(0,Arbre)]) + tB[0]
         Marques.add(0).
@@ -398,7 +398,7 @@ Tout est en annexe. Pour le jeu de tests l'allocation trouvée n'est pas nécess
 \subsection{Question 2}
 Le code est laissé en annexe. On utilise la bibliothèque random et on a créé une troisième fonction qui renvoie une instance complète avec un arbre et ses données. On a écrit des fonctions pour créé des arbres droits et des arbres de hauteur 2 également. Les arbres droits servent à affiner les tests pour l'algorithme 1.
 \subsection{Question 3}
-Pour CalculSigmaOptimum on rencontre un problème de mémoire pour $h = 5$, c'est à dire $n = 31$. Le nombre d'opérations étant alors de l'ordre de $2^{31} = 2147483648$ opérations. En faisant des tests intermédiaires sur des arbres droits on affine : le problème de mémoire est rencontré pour n = 19. \\
+Pour CalculSigmaOptimum on rencontre un problème de mémoire pour $h = 5$, c'est à dire $n = 31$. Le nombre d'opérations étant alors de l'ordre de $2^{31} = 2147483648$ opérations. En faisant des tests intermédiaires sur des arbres droits on affine : le problème de mémoire est rencontré dès n = 19. \\
 On écrit une fonction qui fait le calcul d'allocation par l'algorithme 2 directement (elle appelle simplement une fois CalculBorneinf puis CalculSigmaOptimum2 en ayant initialisé des listes à 0 partout pour dA, dB etc.).
 Pour cette fonction la dernière valeur de h pour laquelle l'algorithme fonctionne est h =15, donc n = 32767. A ce stade l'exécution est déjà de 2-3 minutes, il ne nous semble pas nécessaire d'affiner plus. Pour les mesures expérimentales on prendra h = 12 au plus car on répétera les tests pour une même valeur de n plusieurs fois afin de lisser les valeurs.
 
